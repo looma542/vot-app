@@ -1,0 +1,108 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <title>تطبيق التصويت</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background: #f2f2f2;
+      text-align: center;
+      padding: 30px;
+      direction: rtl;
+    }
+    h1 {
+      color: #333;
+    }
+    .candidate {
+      background: #fff;
+      margin: 15px auto;
+      padding: 20px;
+      border-radius: 10px;
+      width: 80%;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    button {
+      padding: 10px 20px;
+      margin-top: 10px;
+      background: #007bff;
+      border: none;
+      border-radius: 5px;
+      color: white;
+      cursor: pointer;
+    }
+    button:disabled {
+      background: gray;
+      cursor: not-allowed;
+    }
+    .winner {
+      margin-top: 30px;
+      font-size: 20px;
+      color: green;
+    }
+  </style>
+</head>
+<body>
+  <h1>صوّت لمرشحك المفضل</h1>
+
+  <div class="candidate">
+    <h2>طه حسين قناوي</h2>
+    <button onclick="vote('taha')">صوت</button>
+    <p id="votes-taha">0 صوت</p>
+  </div>
+
+  <div class="candidate">
+    <h2>خميس جمعه الخولي</h2>
+    <button onclick="vote('khamees')">صوت</button>
+    <p id="votes-khamees">0 صوت</p>
+  </div>
+
+  <div class="candidate">
+    <h2>رمضان عياد المغازي</h2>
+    <button onclick="vote('ramadan')">صوت</button>
+    <p id="votes-ramadan">0 صوت</p>
+  </div>
+
+  <div class="winner" id="winner">المرشح المتصدر: لا أحد بعد</div>
+
+  <script>
+    const votes = {
+      taha: 0,
+      khamees: 0,
+      ramadan: 0
+    };
+
+    function vote(candidate) {
+      if (localStorage.getItem("voted")) {
+        alert("لقد قمت بالتصويت بالفعل!");
+        return;
+      }
+
+      votes[candidate]++;
+      localStorage.setItem("voted", "yes");
+      updateUI();
+    }
+
+    function updateUI() {
+      document.getElementById("votes-taha").innerText = votes.taha + " صوت";
+      document.getElementById("votes-khamees").innerText = votes.khamees + " صوت";
+      document.getElementById("votes-ramadan").innerText = votes.ramadan + " صوت";
+
+      let winner = "لا أحد بعد";
+      let max = 0;
+      for (let c in votes) {
+        if (votes[c] > max) {
+          max = votes[c];
+          if (c === "taha") winner = "طه حسين قناوي";
+          if (c === "khamees") winner = "خميس جمعه الخولي";
+          if (c === "ramadan") winner = "رمضان عياد المغازي";
+        }
+      }
+      document.getElementById("winner").innerText = "المرشح المتصدر: " + winner;
+    }
+
+    updateUI();
+  </script>
+</body>
+</html>
